@@ -1,4 +1,4 @@
-# Addy's dotfiles.
+# Jose's dotfiles.
 
 This repo contains my personal dotfiles and are heavily based on [paul](https://github.com/paulirish/dotfiles/) and [mathias](https://github.com/mathiasbynens/dotfiles/)'s.
 
