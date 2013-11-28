@@ -1,0 +1,5 @@
+[
+{ "keys": ["f12"], "command": "reindent"},
+{ "keys": ["alt+."], "command": "reveal_in_side_bar" },
+{ "keys": ["alt+o"], "command": "select_favorite_file" }
+]
