@@ -1,0 +1,134 @@
+/*global module:false*/
+'use strict';
+
+module.exports = function(grunt) {
+	// Project configuration
+	grunt.initConfig({
+		pkg: grunt.file.readJSON('package.json'),
+		compass: {
+			dist: {
+				options: {
+					config: 'config.rb'
+				}
+			}
+		},
+		uglify: {
+			dist: {
+				expand: true,
+				cwd: 'app/webroot/js/src/',
+				src: ['**/*.js', '!vendor/**/*.js'],
+				dest: 'app/webroot/js/build/'
+			}
+		},
+		jshint: {
+			dist: {
+				src: ['app/webroot/js/src/**/*.js', '!app/webroot/js/src/vendor/**/*.js', '!app/webroot/js/src/template/**/*.js']
+			}
+		},
+		imagemin: {
+			dist: {
+				expand: true,
+				cwd: 'app/webroot/img/',
+				src: ['**/*.{png,jpg}'],
+				dest: 'app/webroot/img/'
+			}
+		},
+		handlebars: {
+			dist: {
+				expand: true,
+				cwd: 'app/webroot/tpl/',
+				src: ['**/*.hbs'],
+				dest: 'app/webroot/js/src/template/',
+				ext: '.js',
+				options: {
+					namespace: '<%= pkg.name %>.template',
+					processName: function(filename) {
+						return filename.replace(grunt.config('handlebars.dist.cwd'), '').replace('/', '.').replace(/.hbs$/, '');
+					}
+				}
+			}
+		},
+		watch: {
+			options: {
+				spawn: false
+			},
+			stylesheets: {
+				files: ['app/webroot/css/src/**/*.scss', '!app/webroot/css/src/**/_*.scss'],
+				tasks: ['compass'],
+				options: {
+					event: ['added', 'changed']
+				}
+			},
+			scripts: {
+				files: '<%= jshint.dist.src %>',
+				tasks: ['jshint', 'uglify'],
+				options: {
+					event: ['added', 'changed']
+				}
+			},
+			images: {
+				files: '<%= imagemin.dist.src %>',
+				tasks: ['imagemin'],
+				options: {
+					event: ['added', 'changed']
+				}
+			}
+		},
+		browser_sync: {
+			files: {
+				src : ['app/webroot/css/**/*.css',
+				'**/*.php',
+                '**/*.ctp',
+                '**/*.js'
+                ]
+			},
+			host : "192.168.0.8",
+            ghostMode: {
+                scroll: true,
+                links: true,
+                forms: true
+            }
+		},
+		phantomcss: {
+			options: {
+				configFile: 'config/testsuite.js'
+			},
+		},
+	});
+
+	grunt.event.on('watch', function(action, filepath) {
+		var relativePath;
+
+		if (grunt.file.isMatch(grunt.config('watch.stylesheets.files'), filepath)) {
+			grunt.config('compass.dist.options.specify', [filepath]);
+		}
+
+		if (grunt.file.isMatch(grunt.config('watch.scripts.files'), filepath)) {
+			relativePath = filepath.replace(grunt.config('uglify.dist.cwd'), '');
+			grunt.config('jshint.dist.src', [filepath]);
+			grunt.config('uglify.dist.src', [relativePath]);
+		}
+
+		if (grunt.file.isMatch(grunt.config('watch.images.files'), filepath)) {
+			relativePath = filepath.replace(grunt.config('imagemin.dist.cwd'), '');
+			grunt.config('imagemin.dist.src', [relativePath]);
+		}
+	});
+
+	// Load tasks
+	grunt.loadTasks('util/grunt');
+
+	// Load vendors tasks
+	grunt.loadNpmTasks('grunt-contrib-compass');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-imagemin');
+	grunt.loadNpmTasks('grunt-contrib-handlebars');
+	grunt.loadNpmTasks('grunt-browser-sync');
+	grunt.loadNpmTasks('grunt-phantomcss');
+
+
+	// Default task.
+	grunt.registerTask('default', ['browser_sync', 'compass', 'handlebars', 'jshint', 'uglify', 'phantomcss']);
+};
