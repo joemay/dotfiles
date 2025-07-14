@@ -1,0 +1,19 @@
+name: kervo
+windows:
+  - name: CODE
+    root: /Users/joseluis/Dev/clickplan/grupo-kervo/DS-Clickplan-Theme
+    panes:
+      - ""
+  - name: GIT
+    root: /Users/joseluis/Dev/clickplan/grupo-kervo/DS-Clickplan-Theme
+    panes:
+      - ""
+  - name: MODULES
+    root: /Users/joseluis/Dev/clickplan/grupo-kervo/DS-Clickplan-Theme/modules/website    
+    panes:
+      - ""
+  - name: IMAGES
+    root:  /Users/joseluis/Library/CloudStorage/Dropbox/DB-Clickplan/Kervo/DS CLK Theme Images/website    
+    panes:
+      - ""
+

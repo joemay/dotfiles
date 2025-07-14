@@ -1,0 +1,18 @@
+return {
+  "mattn/emmet-vim",
+  init = function()
+    vim.g.user_emmet_mode = "inv"
+    vim.g.user_emmet_leader_key = "<C-y>"
+
+    -- Asociar htmldjango como html
+    vim.g.user_emmet_settings = {
+      filetypes = {
+        htmldjango = "html",
+      }
+    }
+
+    -- mapeo en visual para envolver con emmet
+    vim.api.nvim_set_keymap("v", "<leader>e", ":<C-u>call emmet#wrap_with_abbreviation()<CR>", { noremap = true, silent = true })
+  end,
+}
+

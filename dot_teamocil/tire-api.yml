@@ -1,0 +1,23 @@
+name: tire-api
+windows:
+  - name: GEMINI
+    root: /Users/joseluis/Dev/freelance/docker/tire-api/
+    panes:
+      - ""
+  - name: CODE
+    root: /Users/joseluis/Dev/freelance/docker/tire-api/
+    panes:
+      - ""
+  - name: GIT
+    root: /Users/joseluis/Dev/freelance/docker/tire-api/
+    panes:
+      - ""
+  - name: DOCKER
+    root: /Users/joseluis/Dev/freelance/docker/tire-api/
+    panes:
+      - ""
+  - name: SQL
+    root: /Users/joseluis/Dev/freelance/docker/tire-api/
+    panes:
+      - ""
+
