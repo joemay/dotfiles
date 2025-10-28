@@ -47,6 +47,14 @@ alias ubuntu-dev='docker run -it --name ubuntu-dev -v /Users/joseluis/Library/Cl
 alias gcm="/Users/joseluis/Library/CloudStorage/Dropbox/DB-Freelance/SCRIPTS/BASH/generate_commit_message.sh"
 alias git-switch='/Users/joseluis/Dropbox/Scripts/Bash/git-switch.sh'
 
+# Neovim configuration switcher
+alias nvim-lazy='NVIM_APPNAME=nvim-lazyvim nvim'
+alias nvim-custom='nvim'  # Tu configuración personalizada (default)
+
+# Tmux development sessions (Neovim + Claude Code)
+alias dev='dev-session'        # LazyVim arriba + Claude Code abajo
+alias dev-nvim='dev-nvim'      # Tu Neovim personalizado + Claude Code
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

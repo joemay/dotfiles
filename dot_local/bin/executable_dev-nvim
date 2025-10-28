@@ -1,0 +1,23 @@
+#!/bin/bash
+# dev-nvim: Abre tu Neovim personalizado (75%) arriba y Claude Code (25%) abajo
+
+SESSION_NAME="${1:-nvim-dev}"
+
+tmux has-session -t "$SESSION_NAME" 2>/dev/null
+
+if [ $? != 0 ]; then
+  # Crear nueva sesión con tu Neovim
+  tmux new-session -d -s "$SESSION_NAME" -n editor
+
+  # Panel principal (arriba): Tu Neovim personalizado ocupando 75%
+  tmux send-keys -t "$SESSION_NAME:editor.0" 'nvim' C-m
+
+  # Dividir horizontalmente (abajo): Claude Code ocupando 25%
+  tmux split-window -t "$SESSION_NAME:editor" -v -p 25
+  tmux send-keys -t "$SESSION_NAME:editor.1" 'claude' C-m
+
+  # Enfocar en el panel de Neovim (arriba)
+  tmux select-pane -t "$SESSION_NAME:editor.0"
+fi
+
+tmux attach-session -t "$SESSION_NAME"
