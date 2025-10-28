@@ -78,6 +78,7 @@ get_color_for_program() {
     local in_programs=0
     local current_name=""
     local color=""
+    local found_name=0
 
     while IFS= read -r line; do
         # Detectar sección de programas
@@ -93,24 +94,29 @@ get_color_for_program() {
         fi
 
         if [[ $in_programs -eq 1 ]]; then
-            # Buscar name
-            if [[ "$line" =~ name:\ \"(.+)\" ]] || [[ "$line" =~ name:\ \'(.+)\' ]]; then
-                current_name="${BASH_REMATCH[1]}"
+            # Detectar nueva entrada (línea que empieza con "  - name:")
+            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+name: ]]; then
+                # Resetear si empezamos una nueva entrada
+                if [[ $found_name -eq 1 ]] && [[ "$program_name" != "$current_name" ]]; then
+                    current_name=""
+                    color=""
+                    found_name=0
+                fi
             fi
 
-            # Buscar color
-            if [[ "$line" =~ color:\ \[([0-9]+),\ ([0-9]+),\ ([0-9]+)\] ]]; then
-                color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
-
-                # Verificar si el programa coincide
+            # Buscar name
+            if [[ "$line" =~ name:[[:space:]]+\"([^\"]+)\" ]]; then
+                current_name="${BASH_REMATCH[1]}"
                 if [[ "$program_name" == "$current_name" ]]; then
-                    echo "$color"
-                    return 0
+                    found_name=1
                 fi
+            fi
 
-                # Resetear para la siguiente entrada
-                current_name=""
-                color=""
+            # Buscar color (solo si ya encontramos el name correcto)
+            if [[ $found_name -eq 1 ]] && [[ "$line" =~ color:[[:space:]]+\[([0-9]+),[[:space:]]+([0-9]+),[[:space:]]+([0-9]+)\] ]]; then
+                color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
+                echo "$color"
+                return 0
             fi
         fi
     done < "$CONFIG_FILE"
@@ -125,6 +131,7 @@ get_emoji_for_program() {
     local in_programs=0
     local current_name=""
     local emoji=""
+    local found_name=0
 
     while IFS= read -r line; do
         # Detectar sección de programas
@@ -140,24 +147,29 @@ get_emoji_for_program() {
         fi
 
         if [[ $in_programs -eq 1 ]]; then
-            # Buscar name
-            if [[ "$line" =~ name:\ \"(.+)\" ]] || [[ "$line" =~ name:\ \'(.+)\' ]]; then
-                current_name="${BASH_REMATCH[1]}"
+            # Detectar nueva entrada (línea que empieza con "  - name:")
+            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+name: ]]; then
+                # Resetear si empezamos una nueva entrada
+                if [[ $found_name -eq 1 ]] && [[ "$program_name" != "$current_name" ]]; then
+                    current_name=""
+                    emoji=""
+                    found_name=0
+                fi
             fi
 
-            # Buscar emoji
-            if [[ "$line" =~ emoji:\ \"(.+)\" ]] || [[ "$line" =~ emoji:\ \'(.+)\' ]]; then
-                emoji="${BASH_REMATCH[1]}"
-
-                # Verificar si el programa coincide
+            # Buscar name
+            if [[ "$line" =~ name:[[:space:]]+\"([^\"]+)\" ]]; then
+                current_name="${BASH_REMATCH[1]}"
                 if [[ "$program_name" == "$current_name" ]]; then
-                    echo "$emoji"
-                    return 0
+                    found_name=1
                 fi
+            fi
 
-                # Resetear para la siguiente entrada
-                current_name=""
-                emoji=""
+            # Buscar emoji (solo si ya encontramos el name correcto)
+            if [[ $found_name -eq 1 ]] && [[ "$line" =~ emoji:[[:space:]]+\"([^\"]+)\" ]]; then
+                emoji="${BASH_REMATCH[1]}"
+                echo "$emoji"
+                return 0
             fi
         fi
     done < "$CONFIG_FILE"
