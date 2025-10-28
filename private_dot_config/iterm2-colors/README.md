@@ -1,6 +1,6 @@
 # iTerm2 Tab Color Manager
 
-Sistema de gestión de colores y emojis de pestañas de iTerm2 basado en YAML.
+Sistema de gestión de colores de pestañas de iTerm2 basado en YAML.
 
 ## 📍 Ubicación de archivos
 
@@ -10,12 +10,10 @@ Sistema de gestión de colores y emojis de pestañas de iTerm2 basado en YAML.
 
 ## 🎨 Cómo funciona
 
-El sistema cambia automáticamente el color y título de las pestañas de iTerm2 basándose en:
+El sistema cambia automáticamente el color de las pestañas de iTerm2 basándose en:
 
-1. **Directorio actual**: Detecta patrones en la ruta del directorio y cambia el color
-2. **Programa ejecutado**: Detecta qué programa estás ejecutando y cambia:
-   - **Color** de la pestaña
-   - **Título** de la pestaña con un **emoji** identificador
+1. **Directorio actual**: Detecta patrones en la ruta del directorio y cambia el color de la pestaña
+2. **Programa ejecutado**: Detecta qué programa estás ejecutando y cambia el color de la pestaña
 
 ## ⚙️ Configuración
 
@@ -38,15 +36,16 @@ directories:
     description: "Cualquier carpeta que contenga 'nombre-carpeta'"
 ```
 
-### Agregar color y emoji para un programa
+### Agregar color para un programa
 
 ```yaml
 programs:
   - name: "docker"
-    color: [33, 150, 243]   # Color de la pestaña
-    emoji: "🐳"              # Emoji en el título
+    color: [33, 150, 243]   # Color de la pestaña (RGB 0-255)
     description: "Docker commands"
 ```
+
+Nota: El campo `emoji` en el YAML es opcional y actualmente no se usa, solo se aplica el color.
 
 ## 🎨 Colores RGB predefinidos
 
@@ -59,42 +58,37 @@ programs:
 - **Cyan**: [100, 200, 255]
 - **Rosa**: [255, 100, 200]
 
-## 😀 Emojis sugeridos por categoría
+## 🎨 Sugerencias de colores por tipo de herramienta
 
 ### Editores y desarrollo
-- ✏️ Editor de texto (nvim, vim)
-- 💻 IDE
-- 📝 Markdown editor
+- **Púrpura oscuro** [139, 69, 255] - Editores (nvim, vim)
+- **Azul** [100, 100, 255] - IDEs
 
-### IA y asistentes
-- 🤖 Claude Code, AI tools
-- 🧠 Machine learning
-- ✨ AI assistants
+### IA y herramientas
+- **Naranja** [255, 150, 100] - AI tools (Claude, aider)
+- **Amarillo** [255, 200, 100] - Configuración
 
-### Herramientas de desarrollo
-- 🐳 Docker
-- 📦 Package managers (npm, yarn)
-- 🔀 Git, control de versiones
-- 🟢 Node.js, JavaScript runtime
+### Contenedores y paquetes
+- **Azul Docker** [33, 150, 243] - Docker
+- **Rojo npm** [203, 56, 55] - npm
+- **Azul Yarn** [44, 142, 187] - yarn
 
-### Lenguajes de programación
-- 🐍 Python
-- ☕ Java
-- 🦀 Rust
-- 🐹 Go
-- 💎 Ruby
+### Lenguajes
+- **Amarillo Python** [255, 213, 79] - Python
+- **Verde Node** [104, 160, 99] - Node.js
+
+### Git y control de versiones
+- **Rojo Git** [240, 80, 50] - Git, LazyGit
 
 ### Bases de datos
-- 🗄️ Bases de datos SQL
-- 💾 Redis, cache
-- 🍃 MongoDB
+- **Azul PostgreSQL** [51, 103, 145] - PostgreSQL
+- **Azul MySQL** [0, 117, 143] - MySQL
+- **Rojo Redis** [220, 50, 47] - Redis
 
-### Sistemas y DevOps
-- 🔐 SSH, conexiones seguras
-- 🖥️ Terminal multiplexers (tmux)
-- 📊 Monitoring (htop, top)
-- ⚙️ Configuración
-- 🚀 Deploy, CI/CD
+### Sistemas
+- **Cyan** [100, 200, 255] - SSH
+- **Verde** [30, 215, 96] - tmux
+- **Púrpura** [200, 100, 255] - Monitoring (htop)
 
 ## 🔄 Aplicar cambios
 
@@ -121,32 +115,28 @@ directories:
     description: "Proyectos de clientes"
 ```
 
-### Programas adicionales con emojis
+### Programas adicionales
 
 ```yaml
 programs:
   - name: "python"
     color: [255, 213, 79]
-    emoji: "🐍"
     description: "Python REPL"
 
   - name: "node"
     color: [104, 160, 99]
-    emoji: "🟢"
     description: "Node.js"
 
   - name: "docker"
     color: [33, 150, 243]
-    emoji: "🐳"
     description: "Docker CLI"
 
   - name: "claude"
     color: [255, 150, 100]
-    emoji: "🤖"
     description: "Claude Code AI"
 ```
 
-**Resultado**: Cuando ejecutes `python`, la pestaña se pondrá amarilla y mostrará "🐍 python" como título.
+**Resultado**: Cuando ejecutes `python`, la pestaña se pondrá amarilla.
 
 ## 🛠️ Solución de problemas
 

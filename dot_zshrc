@@ -62,7 +62,7 @@ if [[ -f "${HOME}/.config/iterm2-colors/iterm2-color-manager.sh" ]]; then
 
     # Wrapper para nvim-lazy (LazyVim)
     nvim-lazy() {
-        apply_color_for_program "nvim" "LazyVim"
+        apply_color_for_program "nvim"
         NVIM_APPNAME=nvim-lazyvim command nvim "$@"
         apply_color_for_directory
     }

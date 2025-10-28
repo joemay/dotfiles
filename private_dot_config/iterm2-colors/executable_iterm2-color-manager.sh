@@ -197,10 +197,9 @@ apply_color_for_directory() {
     fi
 }
 
-# Aplicar color y título para programa
+# Aplicar color para programa (sin cambiar título)
 apply_color_for_program() {
     local program="$1"
-    local custom_title="$2"  # Título personalizado opcional
 
     if [[ ! -f "$CONFIG_FILE" ]]; then
         return 1
@@ -209,22 +208,10 @@ apply_color_for_program() {
     local color_values
     color_values=$(get_color_for_program "$program")
 
-    local emoji_value
-    emoji_value=$(get_emoji_for_program "$program")
-
     # Aplicar color si se encuentra
     if [[ -n "$color_values" ]]; then
         read -r r g b <<< "$color_values"
         iterm2_set_tab_color "$r" "$g" "$b"
-    fi
-
-    # Aplicar título con emoji si se encuentra
-    if [[ -n "$emoji_value" ]]; then
-        if [[ -n "$custom_title" ]]; then
-            iterm2_set_tab_title "$emoji_value $custom_title"
-        else
-            iterm2_set_tab_title "$emoji_value $program"
-        fi
         return 0
     fi
 
