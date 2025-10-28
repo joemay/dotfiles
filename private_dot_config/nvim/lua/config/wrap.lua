@@ -46,6 +46,5 @@ vim.api.nvim_create_user_command("WrapWithTag", function(opts)
   end
 end, { range = true })
 
--- Mapeo en modo visual: <leader>w para envolver
-vim.keymap.set("v", "<leader>w", ":WrapWithTag<CR>", { noremap = true, silent = true })
+-- Note: Keymap for this command is in lua/config/mappings.lua
 

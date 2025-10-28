@@ -14,8 +14,8 @@ require("config.wrap")
 require("config.mappings")
 require("config.autocmds")
 
-local html_ids_classes = require("html_ids_classes")
-vim.keymap.set("n", "<leader>fi", html_ids_classes.grep_ids_classes, { desc = "Buscar IDs y clases HTML" })
+-- html_ids_classes module (keymaps are in config/mappings.lua)
+require("html_ids_classes")
 
 
 -- Configuración de indentación con espacios
