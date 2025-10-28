@@ -12,7 +12,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.html",
   callback = function()
     if vim.bo.filetype == "htmldjango" then
-      vim.cmd("normal! gg=G")
+      -- Guarda la posición actual del cursor
+      local pos = vim.api.nvim_win_get_cursor(0)
+      -- Reindenta todo el archivo
+      vim.cmd("silent normal! gg=G")
+      -- Restaura la posición del cursor
+      vim.api.nvim_win_set_cursor(0, pos)
     end
   end,
 })
@@ -21,6 +26,14 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "htmldjango",
   callback = function()
     vim.bo.indentexpr = "HtmlIndent()"
+  end,
+})
+
+-- Configurar archivos .hubl para usar htmldjango por defecto
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+  pattern = "*.hubl",
+  callback = function()
+    vim.bo.filetype = "htmldjango"
   end,
 })
 
