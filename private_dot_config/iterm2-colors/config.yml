@@ -35,24 +35,113 @@ directories:
     color: [255, 150, 100]  # Naranja
     description: "Project directories"
 
-# Colores para programas específicos
+# Colores y emojis para programas específicos
 programs:
+  # Editores de texto
   - name: "nvim"
     color: [139, 69, 255]   # Púrpura oscuro
+    emoji: "✏️"
     description: "Neovim editor"
 
   - name: "vim"
     color: [139, 69, 255]   # Púrpura oscuro
+    emoji: "✏️"
     description: "Vim editor"
 
-  # Puedes agregar más programas aquí
-  # - name: "docker"
-  #   color: [33, 150, 243]
-  #   description: "Docker commands"
+  # Claude Code / AI
+  - name: "claude"
+    color: [255, 150, 100]  # Naranja
+    emoji: "🤖"
+    description: "Claude Code AI"
 
-  # - name: "python"
-  #   color: [255, 213, 79]
-  #   description: "Python interpreter"
+  - name: "aider"
+    color: [255, 150, 100]  # Naranja
+    emoji: "🤖"
+    description: "AI coding assistant"
+
+  # Development tools
+  - name: "docker"
+    color: [33, 150, 243]   # Azul Docker
+    emoji: "🐳"
+    description: "Docker commands"
+
+  - name: "docker-compose"
+    color: [33, 150, 243]
+    emoji: "🐳"
+    description: "Docker Compose"
+
+  - name: "npm"
+    color: [203, 56, 55]    # Rojo npm
+    emoji: "📦"
+    description: "NPM package manager"
+
+  - name: "yarn"
+    color: [44, 142, 187]   # Azul Yarn
+    emoji: "📦"
+    description: "Yarn package manager"
+
+  - name: "node"
+    color: [104, 160, 99]   # Verde Node
+    emoji: "🟢"
+    description: "Node.js"
+
+  - name: "python"
+    color: [255, 213, 79]   # Amarillo Python
+    emoji: "🐍"
+    description: "Python interpreter"
+
+  - name: "python3"
+    color: [255, 213, 79]
+    emoji: "🐍"
+    description: "Python 3"
+
+  # Git
+  - name: "git"
+    color: [240, 80, 50]    # Rojo Git
+    emoji: "🔀"
+    description: "Git version control"
+
+  - name: "lazygit"
+    color: [240, 80, 50]
+    emoji: "🔀"
+    description: "LazyGit TUI"
+
+  # Databases
+  - name: "psql"
+    color: [51, 103, 145]   # Azul PostgreSQL
+    emoji: "🗄️"
+    description: "PostgreSQL client"
+
+  - name: "mysql"
+    color: [0, 117, 143]    # Azul MySQL
+    emoji: "🗄️"
+    description: "MySQL client"
+
+  - name: "redis-cli"
+    color: [220, 50, 47]    # Rojo Redis
+    emoji: "💾"
+    description: "Redis client"
+
+  # Terminal tools
+  - name: "ssh"
+    color: [100, 200, 255]  # Cyan
+    emoji: "🔐"
+    description: "SSH connection"
+
+  - name: "tmux"
+    color: [30, 215, 96]    # Verde
+    emoji: "🖥️"
+    description: "Terminal multiplexer"
+
+  - name: "htop"
+    color: [200, 100, 255]  # Púrpura
+    emoji: "📊"
+    description: "Process monitor"
+
+  - name: "top"
+    color: [200, 100, 255]
+    emoji: "📊"
+    description: "Process monitor"
 
 # Color por defecto (null = resetear a default de iTerm2)
 default_color: null

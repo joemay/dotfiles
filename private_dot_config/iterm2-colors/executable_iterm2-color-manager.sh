@@ -16,6 +16,11 @@ iterm2_reset_tab_color() {
     echo -ne "\033]6;1;bg;*;default\a"
 }
 
+# Función para cambiar el título del tab
+iterm2_set_tab_title() {
+    echo -ne "\033]0;$1\007"
+}
+
 # Función para parsear YAML simple (sin dependencias externas)
 # Busca el color correspondiente al directorio actual
 get_color_for_directory() {
@@ -114,6 +119,53 @@ get_color_for_program() {
     return 1
 }
 
+# Función para obtener emoji de un programa
+get_emoji_for_program() {
+    local program_name="$1"
+    local in_programs=0
+    local current_name=""
+    local emoji=""
+
+    while IFS= read -r line; do
+        # Detectar sección de programas
+        if [[ "$line" =~ ^programs: ]]; then
+            in_programs=1
+            continue
+        fi
+
+        # Salir de la sección si encontramos otra sección principal
+        if [[ "$line" =~ ^[a-z]+: ]] && [[ ! "$line" =~ ^programs: ]]; then
+            in_programs=0
+            continue
+        fi
+
+        if [[ $in_programs -eq 1 ]]; then
+            # Buscar name
+            if [[ "$line" =~ name:\ \"(.+)\" ]] || [[ "$line" =~ name:\ \'(.+)\' ]]; then
+                current_name="${BASH_REMATCH[1]}"
+            fi
+
+            # Buscar emoji
+            if [[ "$line" =~ emoji:\ \"(.+)\" ]] || [[ "$line" =~ emoji:\ \'(.+)\' ]]; then
+                emoji="${BASH_REMATCH[1]}"
+
+                # Verificar si el programa coincide
+                if [[ "$program_name" == "$current_name" ]]; then
+                    echo "$emoji"
+                    return 0
+                fi
+
+                # Resetear para la siguiente entrada
+                current_name=""
+                emoji=""
+            fi
+        fi
+    done < "$CONFIG_FILE"
+
+    echo ""
+    return 1
+}
+
 # Aplicar color para directorio
 apply_color_for_directory() {
     if [[ ! -f "$CONFIG_FILE" ]]; then
@@ -133,9 +185,10 @@ apply_color_for_directory() {
     fi
 }
 
-# Aplicar color para programa
+# Aplicar color y título para programa
 apply_color_for_program() {
     local program="$1"
+    local custom_title="$2"  # Título personalizado opcional
 
     if [[ ! -f "$CONFIG_FILE" ]]; then
         return 1
@@ -144,9 +197,22 @@ apply_color_for_program() {
     local color_values
     color_values=$(get_color_for_program "$program")
 
+    local emoji_value
+    emoji_value=$(get_emoji_for_program "$program")
+
+    # Aplicar color si se encuentra
     if [[ -n "$color_values" ]]; then
         read -r r g b <<< "$color_values"
         iterm2_set_tab_color "$r" "$g" "$b"
+    fi
+
+    # Aplicar título con emoji si se encuentra
+    if [[ -n "$emoji_value" ]]; then
+        if [[ -n "$custom_title" ]]; then
+            iterm2_set_tab_title "$emoji_value $custom_title"
+        else
+            iterm2_set_tab_title "$emoji_value $program"
+        fi
         return 0
     fi
 
@@ -156,7 +222,9 @@ apply_color_for_program() {
 # Exportar funciones para uso en zsh
 export -f iterm2_set_tab_color 2>/dev/null || true
 export -f iterm2_reset_tab_color 2>/dev/null || true
+export -f iterm2_set_tab_title 2>/dev/null || true
 export -f get_color_for_directory 2>/dev/null || true
 export -f get_color_for_program 2>/dev/null || true
+export -f get_emoji_for_program 2>/dev/null || true
 export -f apply_color_for_directory 2>/dev/null || true
 export -f apply_color_for_program 2>/dev/null || true

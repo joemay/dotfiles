@@ -1,6 +1,6 @@
 # iTerm2 Tab Color Manager
 
-Sistema de gestión de colores de pestañas de iTerm2 basado en YAML.
+Sistema de gestión de colores y emojis de pestañas de iTerm2 basado en YAML.
 
 ## 📍 Ubicación de archivos
 
@@ -10,10 +10,12 @@ Sistema de gestión de colores de pestañas de iTerm2 basado en YAML.
 
 ## 🎨 Cómo funciona
 
-El sistema cambia automáticamente el color de las pestañas de iTerm2 basándose en:
+El sistema cambia automáticamente el color y título de las pestañas de iTerm2 basándose en:
 
-1. **Directorio actual**: Detecta patrones en la ruta del directorio
-2. **Programa ejecutado**: Detecta qué programa estás ejecutando (nvim, vim, etc.)
+1. **Directorio actual**: Detecta patrones en la ruta del directorio y cambia el color
+2. **Programa ejecutado**: Detecta qué programa estás ejecutando y cambia:
+   - **Color** de la pestaña
+   - **Título** de la pestaña con un **emoji** identificador
 
 ## ⚙️ Configuración
 
@@ -36,12 +38,13 @@ directories:
     description: "Cualquier carpeta que contenga 'nombre-carpeta'"
 ```
 
-### Agregar color para un programa
+### Agregar color y emoji para un programa
 
 ```yaml
 programs:
   - name: "docker"
-    color: [33, 150, 243]
+    color: [33, 150, 243]   # Color de la pestaña
+    emoji: "🐳"              # Emoji en el título
     description: "Docker commands"
 ```
 
@@ -55,6 +58,43 @@ programs:
 - **Púrpura**: [139, 69, 255]
 - **Cyan**: [100, 200, 255]
 - **Rosa**: [255, 100, 200]
+
+## 😀 Emojis sugeridos por categoría
+
+### Editores y desarrollo
+- ✏️ Editor de texto (nvim, vim)
+- 💻 IDE
+- 📝 Markdown editor
+
+### IA y asistentes
+- 🤖 Claude Code, AI tools
+- 🧠 Machine learning
+- ✨ AI assistants
+
+### Herramientas de desarrollo
+- 🐳 Docker
+- 📦 Package managers (npm, yarn)
+- 🔀 Git, control de versiones
+- 🟢 Node.js, JavaScript runtime
+
+### Lenguajes de programación
+- 🐍 Python
+- ☕ Java
+- 🦀 Rust
+- 🐹 Go
+- 💎 Ruby
+
+### Bases de datos
+- 🗄️ Bases de datos SQL
+- 💾 Redis, cache
+- 🍃 MongoDB
+
+### Sistemas y DevOps
+- 🔐 SSH, conexiones seguras
+- 🖥️ Terminal multiplexers (tmux)
+- 📊 Monitoring (htop, top)
+- ⚙️ Configuración
+- 🚀 Deploy, CI/CD
 
 ## 🔄 Aplicar cambios
 
@@ -81,22 +121,32 @@ directories:
     description: "Proyectos de clientes"
 ```
 
-### Programas adicionales
+### Programas adicionales con emojis
 
 ```yaml
 programs:
   - name: "python"
     color: [255, 213, 79]
+    emoji: "🐍"
     description: "Python REPL"
 
   - name: "node"
     color: [104, 160, 99]
+    emoji: "🟢"
     description: "Node.js"
 
   - name: "docker"
     color: [33, 150, 243]
+    emoji: "🐳"
     description: "Docker CLI"
+
+  - name: "claude"
+    color: [255, 150, 100]
+    emoji: "🤖"
+    description: "Claude Code AI"
 ```
+
+**Resultado**: Cuando ejecutes `python`, la pestaña se pondrá amarilla y mostrará "🐍 python" como título.
 
 ## 🛠️ Solución de problemas
 
