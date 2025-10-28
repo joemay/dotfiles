@@ -38,6 +38,32 @@ function iterm2_print_user_vars() {
   iterm2_set_user_var diskAvail "$avail_gb"
 }
 
+# ============================================
+# iTerm2 Tab Color Automation (YAML-based)
+# ============================================
+# Configuración en: ~/.config/iterm2-colors/config.yml
+
+# Cargar el gestor de colores
+if [[ -f "${HOME}/.config/iterm2-colors/iterm2-color-manager.sh" ]]; then
+    source "${HOME}/.config/iterm2-colors/iterm2-color-manager.sh"
+
+    # Hook que se ejecuta al cambiar de directorio
+    chpwd() {
+        apply_color_for_directory
+    }
+
+    # Wrapper para nvim que cambia color al abrir
+    nvim() {
+        apply_color_for_program "nvim"
+        command nvim "$@"
+        # Restaurar color basado en directorio al salir
+        apply_color_for_directory
+    }
+
+    # Aplicar color inicial al abrir nueva terminal
+    apply_color_for_directory
+fi
+
 # Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 

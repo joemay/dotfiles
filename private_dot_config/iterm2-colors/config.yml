@@ -1,0 +1,58 @@
+# iTerm2 Tab Color Configuration
+# Formato: path_pattern -> color (RGB 0-255)
+
+directories:
+  # Proyectos específicos
+  - path: "/Users/joseluis/Dev/clickplan"
+    color: [255, 200, 100]  # Amarillo
+    description: "Proyecto Clickplan"
+
+  # Configuraciones de Neovim
+  - path: "*/nvim-lazyvim*"
+    color: [100, 255, 100]  # Verde
+    description: "LazyVim config"
+
+  - path: "*/nvim*"
+    color: [100, 100, 255]  # Azul/Púrpura
+    description: "Neovim config"
+
+  # Directorios de configuración
+  - path: "*/.config*"
+    color: [255, 200, 100]  # Amarillo
+    description: "Config directories"
+
+  # Dropbox
+  - path: "*/Dropbox*"
+    color: [100, 200, 255]  # Cyan
+    description: "Dropbox files"
+
+  # Proyectos generales
+  - path: "*/Projects*"
+    color: [255, 150, 100]  # Naranja
+    description: "Project directories"
+
+  - path: "*/projects*"
+    color: [255, 150, 100]  # Naranja
+    description: "Project directories"
+
+# Colores para programas específicos
+programs:
+  - name: "nvim"
+    color: [139, 69, 255]   # Púrpura oscuro
+    description: "Neovim editor"
+
+  - name: "vim"
+    color: [139, 69, 255]   # Púrpura oscuro
+    description: "Vim editor"
+
+  # Puedes agregar más programas aquí
+  # - name: "docker"
+  #   color: [33, 150, 243]
+  #   description: "Docker commands"
+
+  # - name: "python"
+  #   color: [255, 213, 79]
+  #   description: "Python interpreter"
+
+# Color por defecto (null = resetear a default de iTerm2)
+default_color: null
