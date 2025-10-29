@@ -56,6 +56,19 @@ if [[ -f "${HOME}/.config/iterm2-colors/iterm2-color-manager.sh" ]]; then
     apply_color_for_directory
 fi
 
+# ============================================
+# Shell Functions - App Management
+# ============================================
+# Location: ~/.config/shell-functions/
+
+# Source shell functions if available
+if [[ -d "${HOME}/.config/shell-functions" ]]; then
+    # Crear aliases para los scripts
+    alias fa="${HOME}/.config/shell-functions/focus-app.sh"
+    alias ka="${HOME}/.config/shell-functions/kill-app.sh"
+    alias fqa="${HOME}/.config/shell-functions/force-quit-app.sh"
+fi
+
 # Oh My Zsh
 source $ZSH/oh-my-zsh.sh
 
