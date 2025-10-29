@@ -153,10 +153,5 @@ apply_color_for_program() {
     return 1
 }
 
-# Exportar funciones para uso en zsh
-export -f iterm2_set_tab_color 2>/dev/null || true
-export -f iterm2_reset_tab_color 2>/dev/null || true
-export -f get_color_for_directory 2>/dev/null || true
-export -f get_color_for_program 2>/dev/null || true
-export -f apply_color_for_directory 2>/dev/null || true
-export -f apply_color_for_program 2>/dev/null || true
+# Las funciones en zsh están disponibles automáticamente cuando se hace source
+# No se necesita exportarlas como en bash
