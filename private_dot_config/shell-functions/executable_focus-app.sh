@@ -12,8 +12,9 @@ focus_app() {
     fi
 
     # Convertir la lista separada por comas a líneas y eliminar duplicados
+    # Usar sed para separar solo por ", " (coma + espacio) para no romper nombres con espacios
     # También filtrar algunos procesos helper comunes
-    apps=$(echo "$apps" | tr ', ' '\n' | \
+    apps=$(echo "$apps" | sed 's/, /\n/g' | \
            grep -v "^app_mode_loader$" | \
            grep -v "Helper$" | \
            grep -v "^$" | \
