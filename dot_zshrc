@@ -52,77 +52,6 @@ if [[ -f "${HOME}/.config/iterm2-colors/iterm2-color-manager.sh" ]]; then
         apply_color_for_directory
     }
 
-    # Wrapper para nvim que cambia color al abrir
-    nvim() {
-        apply_color_for_program "nvim"
-        command nvim "$@"
-        # Restaurar color basado en directorio al salir
-        apply_color_for_directory
-    }
-
-    # Wrapper para nvim-lazy (LazyVim)
-    nvim-lazy() {
-        apply_color_for_program "nvim"
-        NVIM_APPNAME=nvim-lazyvim command nvim "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para vim
-    vim() {
-        apply_color_for_program "vim"
-        command vim "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para git (solo cuando se ejecuta interactivamente)
-    git() {
-        apply_color_for_program "git"
-        command git "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para lazygit
-    lazygit() {
-        apply_color_for_program "lazygit"
-        command lazygit "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para docker
-    docker() {
-        apply_color_for_program "docker"
-        command docker "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para docker-compose
-    docker-compose() {
-        apply_color_for_program "docker-compose"
-        command docker-compose "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para python
-    python() {
-        apply_color_for_program "python"
-        command python "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para python3
-    python3() {
-        apply_color_for_program "python3"
-        command python3 "$@"
-        apply_color_for_directory
-    }
-
-    # Wrapper para node
-    node() {
-        apply_color_for_program "node"
-        command node "$@"
-        apply_color_for_directory
-    }
-
     # Aplicar color inicial al abrir nueva terminal
     apply_color_for_directory
 fi
@@ -131,12 +60,13 @@ fi
 source $ZSH/oh-my-zsh.sh
 
 # ALIAS (todos agrupados aquí al final)
-alias lg="lazygit"  # Alias corto, la función wrapper maneja el emoji/color
+alias lg="lazygit"
 alias ubuntu-dev='docker run -it --name ubuntu-dev -v /Users/joseluis/Library/CloudStorage/Dropbox/Dropbox-Dev:/mnt/dropbox-dev ubuntu-dev:latest'
 alias gcm="/Users/joseluis/Library/CloudStorage/Dropbox/DB-Freelance/SCRIPTS/BASH/generate_commit_message.sh"
 alias git-switch='/Users/joseluis/Dropbox/Scripts/Bash/git-switch.sh'
 
-# Nota: nvim-lazy ahora es una función (ver sección iTerm2 arriba)
+# Neovim configuration switcher
+alias nvim-lazy='NVIM_APPNAME=nvim-lazyvim nvim'
 alias nvim-custom='nvim'  # Tu configuración personalizada (default)
 
 # Tmux development sessions (Neovim + Claude Code)
