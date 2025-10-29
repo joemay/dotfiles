@@ -16,11 +16,6 @@ iterm2_reset_tab_color() {
     echo -ne "\033]6;1;bg;*;default\a"
 }
 
-# Función para cambiar el título del tab
-iterm2_set_tab_title() {
-    echo -ne "\033]0;$1\007"
-}
-
 # Función para parsear YAML simple (sin dependencias externas)
 # Busca el color correspondiente al directorio actual
 get_color_for_directory() {
@@ -44,12 +39,12 @@ get_color_for_directory() {
 
         if [[ $in_directories -eq 1 ]]; then
             # Buscar path
-            if [[ "$line" =~ path:\ \"(.+)\" ]] || [[ "$line" =~ path:\ \'(.+)\' ]]; then
+            if [[ "$line" =~ path:[[:space:]]+\"([^\"]+)\" ]]; then
                 current_path="${BASH_REMATCH[1]}"
             fi
 
             # Buscar color
-            if [[ "$line" =~ color:\ \[([0-9]+),\ ([0-9]+),\ ([0-9]+)\] ]]; then
+            if [[ "$line" =~ color:[[:space:]]+\[([0-9]+),[[:space:]]+([0-9]+),[[:space:]]+([0-9]+)\] ]]; then
                 color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
 
                 # Convertir pattern a regex bash
@@ -78,7 +73,6 @@ get_color_for_program() {
     local in_programs=0
     local current_name=""
     local color=""
-    local found_name=0
 
     while IFS= read -r line; do
         # Detectar sección de programas
@@ -94,82 +88,24 @@ get_color_for_program() {
         fi
 
         if [[ $in_programs -eq 1 ]]; then
-            # Detectar nueva entrada (línea que empieza con "  - name:")
-            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+name: ]]; then
-                # Resetear si empezamos una nueva entrada
-                if [[ $found_name -eq 1 ]] && [[ "$program_name" != "$current_name" ]]; then
-                    current_name=""
-                    color=""
-                    found_name=0
-                fi
-            fi
-
             # Buscar name
-            if [[ "$line" =~ name:[[:space:]]+\"([^\"]+)\" ]]; then
+            if [[ "$line" =~ name:\ \"(.+)\" ]] || [[ "$line" =~ name:\ \'(.+)\' ]]; then
                 current_name="${BASH_REMATCH[1]}"
-                if [[ "$program_name" == "$current_name" ]]; then
-                    found_name=1
-                fi
             fi
 
-            # Buscar color (solo si ya encontramos el name correcto)
-            if [[ $found_name -eq 1 ]] && [[ "$line" =~ color:[[:space:]]+\[([0-9]+),[[:space:]]+([0-9]+),[[:space:]]+([0-9]+)\] ]]; then
+            # Buscar color
+            if [[ "$line" =~ color:\ \[([0-9]+),\ ([0-9]+),\ ([0-9]+)\] ]]; then
                 color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
-                echo "$color"
-                return 0
-            fi
-        fi
-    done < "$CONFIG_FILE"
 
-    echo ""
-    return 1
-}
-
-# Función para obtener emoji de un programa
-get_emoji_for_program() {
-    local program_name="$1"
-    local in_programs=0
-    local current_name=""
-    local emoji=""
-    local found_name=0
-
-    while IFS= read -r line; do
-        # Detectar sección de programas
-        if [[ "$line" =~ ^programs: ]]; then
-            in_programs=1
-            continue
-        fi
-
-        # Salir de la sección si encontramos otra sección principal
-        if [[ "$line" =~ ^[a-z]+: ]] && [[ ! "$line" =~ ^programs: ]]; then
-            in_programs=0
-            continue
-        fi
-
-        if [[ $in_programs -eq 1 ]]; then
-            # Detectar nueva entrada (línea que empieza con "  - name:")
-            if [[ "$line" =~ ^[[:space:]]*-[[:space:]]+name: ]]; then
-                # Resetear si empezamos una nueva entrada
-                if [[ $found_name -eq 1 ]] && [[ "$program_name" != "$current_name" ]]; then
-                    current_name=""
-                    emoji=""
-                    found_name=0
-                fi
-            fi
-
-            # Buscar name
-            if [[ "$line" =~ name:[[:space:]]+\"([^\"]+)\" ]]; then
-                current_name="${BASH_REMATCH[1]}"
+                # Verificar si el programa coincide
                 if [[ "$program_name" == "$current_name" ]]; then
-                    found_name=1
+                    echo "$color"
+                    return 0
                 fi
-            fi
 
-            # Buscar emoji (solo si ya encontramos el name correcto)
-            if [[ $found_name -eq 1 ]] && [[ "$line" =~ emoji:[[:space:]]+\"([^\"]+)\" ]]; then
-                emoji="${BASH_REMATCH[1]}"
-                echo "$emoji"
-                return 0
+                # Resetear para la siguiente entrada
+                current_name=""
+                color=""
             fi
         fi
     done < "$CONFIG_FILE"
@@ -197,7 +133,7 @@ apply_color_for_directory() {
     fi
 }
 
-# Aplicar color para programa (sin cambiar título)
+# Aplicar color para programa
 apply_color_for_program() {
     local program="$1"
 
@@ -208,7 +144,6 @@ apply_color_for_program() {
     local color_values
     color_values=$(get_color_for_program "$program")
 
-    # Aplicar color si se encuentra
     if [[ -n "$color_values" ]]; then
         read -r r g b <<< "$color_values"
         iterm2_set_tab_color "$r" "$g" "$b"
@@ -221,9 +156,7 @@ apply_color_for_program() {
 # Exportar funciones para uso en zsh
 export -f iterm2_set_tab_color 2>/dev/null || true
 export -f iterm2_reset_tab_color 2>/dev/null || true
-export -f iterm2_set_tab_title 2>/dev/null || true
 export -f get_color_for_directory 2>/dev/null || true
 export -f get_color_for_program 2>/dev/null || true
-export -f get_emoji_for_program 2>/dev/null || true
 export -f apply_color_for_directory 2>/dev/null || true
 export -f apply_color_for_program 2>/dev/null || true
