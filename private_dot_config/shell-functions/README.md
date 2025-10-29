@@ -5,7 +5,7 @@ Colección de funciones de shell para gestión de aplicaciones en macOS con fuzz
 ## 📁 Scripts disponibles
 
 ### 🎯 focus-app.sh
-Selector fuzzy para cambiar/enfocar aplicaciones abiertas.
+Selector fuzzy para cambiar/enfocar aplicaciones y ventanas abiertas.
 
 **Uso:**
 ```bash
@@ -17,7 +17,14 @@ focus-app.sh         # Comando completo
 - Lista todas las aplicaciones abiertas (sin apps de background)
 - Búsqueda fuzzy con fzf
 - Preview de la aplicación seleccionada
-- Activa/enfoca la app al presionar ENTER
+- **Multi-ventana**: Si la app tiene múltiples ventanas, muestra segundo selector para elegir ventana específica
+- ESC en selector de ventanas activa la app sin seleccionar ventana
+- Activa/enfoca la app o ventana al presionar ENTER
+
+**Flujo:**
+1. Selecciona app con fzf
+2. Si tiene >1 ventana → muestra selector de ventanas
+3. Selecciona ventana específica o ESC para solo activar app
 
 ---
 
