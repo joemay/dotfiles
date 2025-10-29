@@ -40,14 +40,20 @@ get_color_for_directory() {
         if [[ $in_directories -eq 1 ]]; then
             # Buscar path
             if [[ "$line" =~ path:[[:space:]]+\"([^\"]+)\" ]]; then
-                current_path="${BASH_REMATCH[1]}"
+                # En zsh, capturar inmediatamente antes de que se sobrescriba
+                current_path="$match[1]"
             fi
 
-            # Buscar color
-            if [[ "$line" =~ color:[[:space:]]+\[([0-9]+),[[:space:]]+([0-9]+),[[:space:]]+([0-9]+)\] ]]; then
-                color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
+            # Buscar color (usar variable para evitar problemas con [] en zsh)
+            local color_pattern='color:.*\[([0-9]+), ([0-9]+), ([0-9]+)\]'
+            if [[ "$line" =~ $color_pattern ]]; then
+                # En zsh, capturar inmediatamente
+                local r="${match[1]}"
+                local g="${match[2]}"
+                local b="${match[3]}"
+                color="$r $g $b"
 
-                # Convertir pattern a regex bash
+                # Convertir pattern a regex
                 local pattern="${current_path//\*/.*}"
 
                 # Verificar si el directorio actual coincide con el patrón
@@ -90,12 +96,16 @@ get_color_for_program() {
         if [[ $in_programs -eq 1 ]]; then
             # Buscar name
             if [[ "$line" =~ name:\ \"(.+)\" ]] || [[ "$line" =~ name:\ \'(.+)\' ]]; then
-                current_name="${BASH_REMATCH[1]}"
+                current_name="$match[1]"
             fi
 
-            # Buscar color
-            if [[ "$line" =~ color:\ \[([0-9]+),\ ([0-9]+),\ ([0-9]+)\] ]]; then
-                color="${BASH_REMATCH[1]} ${BASH_REMATCH[2]} ${BASH_REMATCH[3]}"
+            # Buscar color (usar variable para evitar problemas con [] en zsh)
+            local color_pattern='color:.*\[([0-9]+), ([0-9]+), ([0-9]+)\]'
+            if [[ "$line" =~ $color_pattern ]]; then
+                local r="${match[1]}"
+                local g="${match[2]}"
+                local b="${match[3]}"
+                color="$r $g $b"
 
                 # Verificar si el programa coincide
                 if [[ "$program_name" == "$current_name" ]]; then
