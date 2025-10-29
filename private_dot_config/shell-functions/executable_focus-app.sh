@@ -11,8 +11,13 @@ focus_app() {
         return 1
     fi
 
-    # Convertir la lista separada por comas a líneas
-    apps=$(echo "$apps" | tr ', ' '\n' | sort)
+    # Convertir la lista separada por comas a líneas y eliminar duplicados
+    # También filtrar algunos procesos helper comunes
+    apps=$(echo "$apps" | tr ', ' '\n' | \
+           grep -v "^app_mode_loader$" | \
+           grep -v "Helper$" | \
+           grep -v "^$" | \
+           sort -u)
 
     # Mostrar en fzf con preview y opciones
     local selected=$(echo "$apps" | fzf \
