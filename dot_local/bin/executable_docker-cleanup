@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Script de limpieza segura de Docker para Colima
+# Ejecuta: docker-cleanup
+
+# Colores para mensajes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Función para imprimir mensajes con color
+print_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[OK]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[AVISO]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+echo ""
+echo "======================================="
+echo "   Limpieza de Docker (Colima)"
+echo "======================================="
+echo ""
+
+# 1. Eliminar contenedores detenidos
+print_info "Limpiando contenedores detenidos..."
+if docker container prune -f; then
+    print_success "Contenedores limpiados"
+else
+    print_error "No se pudieron limpiar los contenedores"
+fi
+echo ""
+
+# 2. Eliminar imágenes colgantes (sin tag)
+print_info "Limpiando imágenes sin etiqueta (dangling)..."
+if docker image prune -f; then
+    print_success "Imágenes limpiadas"
+else
+    print_error "No se pudieron limpiar las imágenes"
+fi
+echo ""
+
+# 3. Eliminar redes no usadas
+print_info "Limpiando redes no utilizadas..."
+if docker network prune -f; then
+    print_success "Redes limpiadas"
+else
+    print_error "No se pudieron limpiar las redes"
+fi
+echo ""
+
+# 4. Eliminar caché de build
+print_info "Limpiando caché de build..."
+if docker builder prune -f; then
+    print_success "Caché de build limpiado"
+else
+    print_error "No se pudo limpiar el caché de build"
+fi
+echo ""
+
+echo "======================================="
+print_success "Limpieza completada"
+echo "======================================="
+echo ""
