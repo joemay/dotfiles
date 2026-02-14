@@ -82,27 +82,47 @@ Monitorea el uso de Docker y alerta cuando supera el umbral configurado.
 # Ver estado actual manualmente
 docker-monitor --manual
 
-# Instalar monitoreo automático diario
-docker-monitor --install-cron
+# Forzar ejeción ignorando el tiempo mínimo entre ejecuciones
+docker-monitor --manual --force
 ```
 
 **Configuración:**
 - **Límite**: 3GB
 - **Umbral de alerta**: 80% (2.4GB)
-- **Frecuencia**: Diaria (9:00 AM)
+- **Frecuencia**: Cada 24 horas
+- **Anti-spam**: Evita ejecución múltiple (mínimo 20h entre ejecuciones)
 
 **Características:**
 - 🔔 Notificación nativa de macOS con botón "Limpiar ahora"
 - 📊 Muestra uso actual vs límite configurado
 - ⚡ Ejecuta `docker-cleanup` automáticamente al hacer clic
+- ⏰ Se ejecuta al iniciar sesión y cada 24 horas (vía launchd)
+- 🚫 Evita notificaciones duplicadas si reinicias tu Mac varias veces
 
-**Instalación del cronjob:**
+**Instalación automática:**
+El agente de launchd se instala automáticamente con chezmoi (archivo: `~/Library/LaunchAgents/com.user.docker-monitor.plist`).
+
+**Comandos útiles:**
 ```bash
-docker-monitor --install-cron
+# Verificar estado del agente
+launchctl list | grep docker-monitor
 
-# Verificar que está instalado
-crontab -l
+# Cargar el agente manualmente
+launchctl load ~/Library/LaunchAgents/com.user.docker-monitor.plist
+
+# Descargar el agente
+launchctl unload ~/Library/LaunchAgents/com.user.docker-monitor.plist
+
+# Ver logs
+tail -f ~/.cache/docker-monitor/error.log
+tail -f ~/.cache/docker-monitor/out.log
 ```
+
+> **⚠️ Migración desde cron:** Si instalaste el monitor anteriormente vía cron, elimínalo:
+> ```bash
+> crontab -e
+> # Eliminar la línea: 0 9 * * * /Users/$USER/.local/bin/docker-monitor
+> ```
 
 ---
 
@@ -213,8 +233,8 @@ brew install chezmoi
 # 2. Inicializar desde GitHub
 chezmoi init --apply joemay/dotfiles
 
-# 3. Instalar cronjob de monitoreo Docker
-docker-monitor --install-cron
+# 3. El agente de monitoreo Docker se carga automáticamente al iniciar sesión
+# (Verificar que esté activo: launchctl list | grep docker-monitor)
 ```
 
 ### Hacer cambios y subirlos:
