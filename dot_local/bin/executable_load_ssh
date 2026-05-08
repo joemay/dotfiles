@@ -1,0 +1,35 @@
+#!/bin/zsh
+
+setopt local_options null_glob
+
+typeset -a candidates
+typeset -a loaded
+
+candidates=(
+  "$HOME/.ssh"/*
+)
+
+for key in "${candidates[@]}"; do
+  [[ -f "$key" ]] || continue
+  [[ "$key" == *.pub ]] && continue
+
+  case "${key:t}" in
+    known_hosts|known_hosts.old|config|config.bak|bak_config|.DS_Store)
+      continue
+      ;;
+  esac
+
+  if ssh-keygen -lf "$key" >/dev/null 2>&1; then
+    if ssh-add --apple-use-keychain "$key" >/dev/null 2>&1; then
+      loaded+=("${key:t}")
+    fi
+  fi
+done
+
+if (( ${#loaded[@]} == 0 )); then
+  print "No se cargaron llaves nuevas desde ~/.ssh"
+  exit 0
+fi
+
+print "Llaves cargadas:"
+printf ' - %s\n' "${loaded[@]}"

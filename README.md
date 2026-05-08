@@ -158,6 +158,22 @@ kill-app.sh "Nombre de la App"
 
 ---
 
+#### `load_ssh`
+Carga automáticamente todas las llaves privadas válidas encontradas en `~/.ssh` usando el llavero de macOS.
+
+```bash
+# Cargar todas las llaves detectadas
+load_ssh
+```
+
+**Qué hace:**
+- Recorre `~/.ssh`
+- Ignora archivos como `*.pub`, `config` y `known_hosts`
+- Valida que cada archivo sea una llave SSH real antes de cargarlo
+- Ejecuta `ssh-add --apple-use-keychain` para cada llave válida
+
+---
+
 #### `iterm2-color-manager.sh`
 Gestiona esquemas de color en iTerm2.
 
@@ -261,7 +277,8 @@ git push
 │   ├── executable_dev-nvim
 │   ├── executable_dev-session
 │   ├── executable_docker-cleanup
-│   └── executable_docker-monitor
+│   ├── executable_docker-monitor
+│   └── executable_load_ssh
 ├── dot_config/             # Configuraciones
 │   ├── nvim/              # Neovim
 │   ├── shell-functions/   # Funciones de shell
